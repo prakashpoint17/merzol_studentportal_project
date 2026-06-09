@@ -2,24 +2,20 @@
 frontend/node_modules/
 
 # Backend
+backend/.venv/
 backend/venv/
 backend/__pycache__/
+__pycache__/
 
-# Environment files
+# Environment
 .env
+backend/.env
+
+# Firebase Secret
+backend/firebase.json
 
 # VS Code
 .vscode/
 
-# OS files
+# OS
 .DS_Store
-
-# Firebase
-backend/firebase.json
-
-backend/firebase.json
-backend/.env
-.env
-frontend/node_modules/
-backend/.venv/
-__pycache__/backend/firebase.json
