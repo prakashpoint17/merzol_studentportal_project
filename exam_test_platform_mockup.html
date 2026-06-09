@@ -1,0 +1,366 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.app{background:var(--color-background-tertiary);min-height:600px;border-radius:var(--border-radius-lg);overflow:hidden}
+.topbar{background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary);padding:12px 20px;display:flex;align-items:center;gap:12px}
+.topbar-title{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.topbar-back{font-size:13px;color:var(--color-text-secondary);cursor:pointer;padding:4px 10px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md)}
+.topbar-back:hover{background:var(--color-background-secondary)}
+.screen{display:none;padding:24px}
+.screen.active{display:block}
+.login-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
+.login-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:24px 16px;text-align:center;cursor:pointer;transition:border-color .15s}
+.login-card:hover{border-color:var(--color-border-primary)}
+.login-card.featured{border:2px solid #378ADD}
+.login-card .icon{width:40px;height:40px;border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.login-card h3{font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.login-card p{font-size:12px;color:var(--color-text-secondary);line-height:1.5}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:var(--border-radius-md);margin-bottom:8px}
+.badge-blue{background:#E6F1FB;color:#0C447C}
+.badge-teal{background:#E1F5EE;color:#085041}
+.badge-purple{background:#EEEDFE;color:#3C3489}
+.section-title{font-size:13px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.04em;margin-bottom:12px}
+.menu-list{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;margin-bottom:20px}
+.menu-item{padding:12px 16px;font-size:14px;color:var(--color-text-primary);border-bottom:0.5px solid var(--color-border-tertiary);cursor:pointer;display:flex;align-items:center;justify-content:space-between}
+.menu-item:last-child{border-bottom:none}
+.menu-item:hover{background:var(--color-background-secondary)}
+.menu-item .chevron{color:var(--color-text-secondary);font-size:12px}
+.form-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px;margin-bottom:16px}
+.form-row{margin-bottom:14px}
+.form-label{font-size:13px;color:var(--color-text-secondary);margin-bottom:5px}
+.form-input{width:100%;padding:7px 10px;font-size:13px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary)}
+.form-input:focus{outline:none;border-color:var(--color-border-primary)}
+.radio-group{display:flex;gap:10px}
+.radio-btn{flex:1;padding:8px 12px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);font-size:13px;text-align:center;cursor:pointer;color:var(--color-text-primary)}
+.radio-btn.selected{border-color:#378ADD;background:#E6F1FB;color:#0C447C}
+.checkbox-list{display:flex;flex-direction:column;gap:6px}
+.checkbox-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--color-text-primary);padding:6px 8px;border-radius:var(--border-radius-md);cursor:pointer}
+.checkbox-item:hover{background:var(--color-background-secondary)}
+.checkbox-item input{accent-color:#378ADD}
+.unit-row{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:6px}
+.unit-row-header{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--color-text-primary);margin-bottom:6px}
+.difficulty-row{display:flex;gap:8px;padding-left:20px}
+.diff-chip{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--color-text-secondary);background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:3px 8px}
+.diff-chip input[type=number]{width:36px;padding:2px 4px;font-size:11px;border:0.5px solid var(--color-border-tertiary);border-radius:4px;background:var(--color-background-primary);color:var(--color-text-primary)}
+.subject-tab{display:flex;gap:6px;margin-bottom:16px}
+.stab{padding:6px 14px;font-size:12px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);cursor:pointer;color:var(--color-text-secondary)}
+.stab.active{background:#E6F1FB;border-color:#378ADD;color:#0C447C}
+.btn-primary{width:100%;padding:10px;background:#378ADD;color:#fff;border:none;border-radius:var(--border-radius-md);font-size:14px;font-weight:500;cursor:pointer;margin-top:8px}
+.btn-primary:hover{background:#185FA5}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.stat-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px;text-align:center}
+.stat-num{font-size:22px;font-weight:500;color:var(--color-text-primary)}
+.stat-label{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.tag{display:inline-block;font-size:11px;padding:2px 7px;border-radius:var(--border-radius-md);margin-right:4px}
+.tag-green{background:#EAF3DE;color:#27500A}
+.tag-amber{background:#FAEEDA;color:#633806}
+.tag-red{background:#FCEBEB;color:#791F1F}
+.test-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px;margin-bottom:10px;cursor:pointer}
+.test-card:hover{border-color:var(--color-border-secondary)}
+.test-card h4{font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.test-card p{font-size:12px;color:var(--color-text-secondary)}
+</style>
+
+<div class="app">
+  <div class="topbar">
+    <span class="topbar-title" id="screen-title">Exam platform</span>
+    <button class="topbar-back" id="back-btn" onclick="goBack()" style="display:none">← Back</button>
+  </div>
+
+  <!-- Home -->
+  <div class="screen active" id="screen-home">
+    <div style="margin-bottom:20px">
+      <p style="font-size:13px;color:var(--color-text-secondary);margin-bottom:16px">Select your login type to continue</p>
+      <div class="login-grid">
+        <div class="login-card" onclick="goTo('school','School login')">
+          <div class="icon" style="background:#E1F5EE;color:#0F6E56;font-size:20px">🏫</div>
+          <div class="badge badge-teal">School</div>
+          <h3>School login</h3>
+          <p>Manage teachers & track student reports</p>
+        </div>
+        <div class="login-card featured" onclick="goTo('teacher','Teacher login')">
+          <div class="icon" style="background:#E6F1FB;color:#185FA5;font-size:20px">👩‍🏫</div>
+          <div class="badge badge-blue">Teacher</div>
+          <h3>Teacher login</h3>
+          <p>Create tests & manage students</p>
+        </div>
+        <div class="login-card" onclick="goTo('student','Student login')">
+          <div class="icon" style="background:#EEEDFE;color:#3C3489;font-size:20px">🎓</div>
+          <div class="badge badge-purple">Student</div>
+          <h3>Student login</h3>
+          <p>Take tests & view your reports</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- School -->
+  <div class="screen" id="screen-school">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-num">3</div><div class="stat-label">Teachers enrolled</div></div>
+      <div class="stat-card"><div class="stat-num">47</div><div class="stat-label">Students total</div></div>
+      <div class="stat-card"><div class="stat-num">12</div><div class="stat-label">Tests created</div></div>
+    </div>
+    <div class="section-title">Menu</div>
+    <div class="menu-list">
+      <div class="menu-item" onclick="goTo('add-teacher','Add teacher')">Add teachers <span class="chevron">›</span></div>
+      <div class="menu-item" onclick="goTo('teacher-reports','Teacher reports')">Teachers <span style="font-size:12px;color:var(--color-text-secondary);margin-left:6px">(click to view tests & student marks)</span><span class="chevron">›</span></div>
+    </div>
+  </div>
+
+  <!-- Add Teacher -->
+  <div class="screen" id="screen-add-teacher">
+    <div class="form-card">
+      <div class="form-row"><div class="form-label">Teacher name</div><input class="form-input" placeholder="Enter name"/></div>
+      <div class="form-row"><div class="form-label">Email address</div><input class="form-input" placeholder="teacher@school.com"/></div>
+      <div class="form-row"><div class="form-label">Type</div>
+        <div class="radio-group">
+          <div class="radio-btn selected" onclick="selectRadio(this,'type-group')">Under school</div>
+          <div class="radio-btn" onclick="selectRadio(this,'type-group')">Freelance</div>
+        </div>
+      </div>
+      <button class="btn-primary">Add teacher</button>
+    </div>
+  </div>
+
+  <!-- Teacher Reports (School view) -->
+  <div class="screen" id="screen-teacher-reports">
+    <div class="section-title">Teachers</div>
+    <div class="test-card" onclick="goTo('student-report','Student report — Ramesh')">
+      <h4>Ramesh Kumar</h4>
+      <p>8 students · 4 tests conducted · <span class="tag tag-green">Active</span></p>
+    </div>
+    <div class="test-card">
+      <h4>Priya Devi</h4>
+      <p>12 students · 7 tests conducted · <span class="tag tag-green">Active</span></p>
+    </div>
+    <div class="test-card">
+      <h4>Suresh Babu</h4>
+      <p>5 students · 2 tests conducted · <span class="tag tag-amber">New</span></p>
+    </div>
+  </div>
+
+  <!-- Teacher Dashboard -->
+  <div class="screen" id="screen-teacher">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-num">3</div><div class="stat-label">Students</div></div>
+      <div class="stat-card"><div class="stat-num">5</div><div class="stat-label">Tests created</div></div>
+      <div class="stat-card"><div class="stat-num">2</div><div class="stat-label">Pending</div></div>
+    </div>
+    <div class="section-title">Menu</div>
+    <div class="menu-list">
+      <div class="menu-item" onclick="goTo('add-student','Add students')">Add students <span class="chevron">›</span></div>
+      <div class="menu-item" onclick="goTo('create-test','Create test')">Create test <span class="chevron">›</span></div>
+      <div class="menu-item" onclick="goTo('teacher-report-list','Reports')">Reports <span class="chevron">›</span></div>
+    </div>
+  </div>
+
+  <!-- Add Student -->
+  <div class="screen" id="screen-add-student">
+    <div class="form-card">
+      <div class="form-row"><div class="form-label">Student name</div><input class="form-input" placeholder="Enter name"/></div>
+      <div class="form-row"><div class="form-label">Email / login ID</div><input class="form-input" placeholder="student@email.com"/></div>
+      <button class="btn-primary">Add student</button>
+    </div>
+    <div class="section-title">Enrolled students</div>
+    <div class="menu-list">
+      <div class="menu-item">Ajay <span class="tag tag-green">Active</span></div>
+      <div class="menu-item">Bala <span class="tag tag-green">Active</span></div>
+      <div class="menu-item">Surya <span class="tag tag-amber">Pending</span></div>
+    </div>
+  </div>
+
+  <!-- Create Test -->
+  <div class="screen" id="screen-create-test">
+    <div class="form-card">
+      <div class="form-row"><div class="form-label">Test name</div><input class="form-input" placeholder="e.g. Physics Unit Test 1"/></div>
+      <div class="form-row">
+        <div class="form-label">Add students</div>
+        <div class="checkbox-list">
+          <label class="checkbox-item"><input type="checkbox" checked> Ajay</label>
+          <label class="checkbox-item"><input type="checkbox" checked> Bala</label>
+          <label class="checkbox-item"><input type="checkbox"> Surya</label>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-label">Select exam</div>
+        <div class="radio-group">
+          <div class="radio-btn selected" id="neet-btn" onclick="selectExam('NEET')">NEET</div>
+          <div class="radio-btn" id="jee-btn" onclick="selectExam('JEE')">JEE</div>
+        </div>
+        <p style="font-size:11px;color:var(--color-text-secondary);margin-top:6px" id="exam-hint">Biology, Physics & Chemistry subjects will be shown</p>
+      </div>
+    </div>
+
+    <div class="subject-tab" id="subject-tabs">
+      <div class="stab active" onclick="switchSubject(this,'physics')">Physics</div>
+      <div class="stab" onclick="switchSubject(this,'chemistry')">Chemistry</div>
+      <div class="stab" id="bio-tab" onclick="switchSubject(this,'biology')">Biology</div>
+    </div>
+
+    <div id="physics-panel">
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:10px">Select units and set difficulty levels</div>
+      <div class="unit-row">
+        <div class="unit-row-header"><input type="checkbox" checked> <strong>1. Units and measurement</strong></div>
+        <div class="difficulty-row">
+          <div class="diff-chip"><input type="checkbox" checked> Easy <input type="number" value="5" class="diff-chip-input"></div>
+          <div class="diff-chip"><input type="checkbox"> Medium <input type="number" value="0" class="diff-chip-input"></div>
+          <div class="diff-chip"><input type="checkbox"> Hard <input type="number" value="0" class="diff-chip-input"></div>
+        </div>
+      </div>
+      <div class="unit-row">
+        <div class="unit-row-header"><input type="checkbox"> <span>2. Motion in a straight line</span></div>
+      </div>
+      <div class="unit-row">
+        <div class="unit-row-header"><input type="checkbox"> <span>3. Motion in a plane</span></div>
+      </div>
+      <div class="unit-row">
+        <div class="unit-row-header"><input type="checkbox"> <span>4. Law of motion</span></div>
+      </div>
+      <div style="font-size:12px;color:var(--color-text-secondary);padding:4px 0 10px;text-align:center">+ 23 more units</div>
+    </div>
+    <div id="chemistry-panel" style="display:none">
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:10px">Select units in Chemistry</div>
+      <div class="unit-row"><div class="unit-row-header"><input type="checkbox"> <span>1. Some basic concepts of chemistry</span></div></div>
+      <div class="unit-row"><div class="unit-row-header"><input type="checkbox"> <span>2. Structure of atom</span></div></div>
+      <div class="unit-row"><div class="unit-row-header"><input type="checkbox"> <span>3. Classification of elements</span></div></div>
+    </div>
+    <div id="biology-panel" style="display:none">
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:10px">Select units in Biology</div>
+      <div class="unit-row"><div class="unit-row-header"><input type="checkbox"> <span>1. The living world</span></div></div>
+      <div class="unit-row"><div class="unit-row-header"><input type="checkbox"> <span>2. Biological classification</span></div></div>
+    </div>
+
+    <div class="form-card" style="margin-top:16px">
+      <div class="form-row"><div class="form-label">Exam duration (minutes)</div><input class="form-input" placeholder="e.g. 90" type="number"/></div>
+      <button class="btn-primary">Create test</button>
+    </div>
+  </div>
+
+  <!-- Teacher Report List -->
+  <div class="screen" id="screen-teacher-report-list">
+    <div class="section-title">Test reports</div>
+    <div class="test-card" onclick="goTo('student-report','Test report — Physics Unit 1')">
+      <h4>Physics unit test 1</h4>
+      <p>NEET · 3 students · Avg score: 72% · <span class="tag tag-green">Completed</span></p>
+    </div>
+    <div class="test-card">
+      <h4>Chemistry chapter test</h4>
+      <p>NEET · 2 students · Avg score: 65% · <span class="tag tag-green">Completed</span></p>
+    </div>
+    <div class="test-card">
+      <h4>Full mock test — JEE</h4>
+      <p>JEE · 3 students · <span class="tag tag-amber">In progress</span></p>
+    </div>
+  </div>
+
+  <!-- Student Report Detail -->
+  <div class="screen" id="screen-student-report">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-num">72%</div><div class="stat-label">Avg score</div></div>
+      <div class="stat-card"><div class="stat-num">45</div><div class="stat-label">Questions</div></div>
+      <div class="stat-card"><div class="stat-num">90</div><div class="stat-label">Minutes</div></div>
+    </div>
+    <div class="section-title">Student results</div>
+    <div class="menu-list">
+      <div class="menu-item">Ajay <span><span class="tag tag-green">85%</span> 38/45</span></div>
+      <div class="menu-item">Bala <span><span class="tag tag-amber">68%</span> 30/45</span></div>
+      <div class="menu-item">Surya <span><span class="tag tag-red">62%</span> 28/45</span></div>
+    </div>
+  </div>
+
+  <!-- Student Login -->
+  <div class="screen" id="screen-student">
+    <div class="section-title">Menu</div>
+    <div class="menu-list">
+      <div class="menu-item" onclick="goTo('student-tests','My tests')">Tests <span style="font-size:12px;color:var(--color-text-secondary);margin-left:4px">(assigned to me)</span><span class="chevron">›</span></div>
+      <div class="menu-item" onclick="goTo('student-report-list','My reports')">Reports <span style="font-size:12px;color:var(--color-text-secondary);margin-left:4px">(completed tests)</span><span class="chevron">›</span></div>
+    </div>
+  </div>
+
+  <!-- Student Tests -->
+  <div class="screen" id="screen-student-tests">
+    <div class="section-title">Assigned tests</div>
+    <div class="test-card">
+      <h4>Physics unit test 1</h4>
+      <p>NEET · 45 questions · 90 mins · <span class="tag tag-amber">Pending</span></p>
+    </div>
+    <div class="test-card">
+      <h4>Chemistry chapter test</h4>
+      <p>NEET · 30 questions · 60 mins · <span class="tag tag-amber">Pending</span></p>
+    </div>
+  </div>
+
+  <!-- Student Report List -->
+  <div class="screen" id="screen-student-report-list">
+    <div class="section-title">My completed tests</div>
+    <div class="test-card" onclick="goTo('my-report-detail','My report — Physics')">
+      <h4>Physics unit test 1</h4>
+      <p>Score: <strong>85%</strong> · 38/45 correct · <span class="tag tag-green">Completed</span></p>
+    </div>
+  </div>
+
+  <!-- My Report Detail -->
+  <div class="screen" id="screen-my-report-detail">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-num">85%</div><div class="stat-label">Your score</div></div>
+      <div class="stat-card"><div class="stat-num">38</div><div class="stat-label">Correct</div></div>
+      <div class="stat-card"><div class="stat-num">7</div><div class="stat-label">Wrong</div></div>
+    </div>
+    <div class="section-title">Subject breakdown</div>
+    <div class="menu-list">
+      <div class="menu-item">Physics <span class="tag tag-green">90%</span></div>
+      <div class="menu-item">Chemistry <span class="tag tag-amber">75%</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const history=[];
+function goTo(id,title){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  document.getElementById('screen-title').textContent=title;
+  history.push(id);
+  document.getElementById('back-btn').style.display='inline-block';
+}
+function goBack(){
+  history.pop();
+  if(history.length===0){
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById('screen-home').classList.add('active');
+    document.getElementById('screen-title').textContent='Exam platform';
+    document.getElementById('back-btn').style.display='none';
+  } else {
+    const prev=history[history.length-1];
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById('screen-'+prev).classList.add('active');
+  }
+}
+function selectRadio(el,group){
+  el.parentElement.querySelectorAll('.radio-btn').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function selectExam(exam){
+  document.getElementById('neet-btn').classList.toggle('selected',exam==='NEET');
+  document.getElementById('jee-btn').classList.toggle('selected',exam==='JEE');
+  const bio=document.getElementById('bio-tab');
+  if(exam==='NEET'){
+    document.getElementById('exam-hint').textContent='Biology, Physics & Chemistry subjects will be shown';
+    bio.style.display='inline-block';
+  } else {
+    document.getElementById('exam-hint').textContent='Maths, Physics & Chemistry subjects will be shown';
+    bio.style.display='none';
+    if(bio.classList.contains('active')){bio.classList.remove('active');document.querySelector('.stab').classList.add('active');switchSubject(document.querySelector('.stab'),'physics');}
+  }
+}
+function switchSubject(el,panel){
+  document.querySelectorAll('.stab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  ['physics','chemistry','biology'].forEach(p=>{
+    const pe=document.getElementById(p+'-panel');
+    if(pe) pe.style.display=p===panel?'block':'none';
+  });
+}
+</script>

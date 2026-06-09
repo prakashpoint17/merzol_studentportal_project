@@ -1,0 +1,25 @@
+# Frontend
+frontend/node_modules/
+
+# Backend
+backend/venv/
+backend/__pycache__/
+
+# Environment files
+.env
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+
+# Firebase
+backend/firebase.json
+
+backend/firebase.json
+backend/.env
+.env
+frontend/node_modules/
+backend/.venv/
+__pycache__/backend/firebase.json
